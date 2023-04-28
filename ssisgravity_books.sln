@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33530.505
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{C9674DCB-5085-4A16-B785-4C70DD1589BD}") = "ssisgravity_books", "ssisgravity_books\ssisgravity_books.dtproj", "{E31BB03E-2A99-4F55-B533-20CA72A6AE63}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Development|Default = Development|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E31BB03E-2A99-4F55-B533-20CA72A6AE63}.Development|Default.ActiveCfg = Development
+		{E31BB03E-2A99-4F55-B533-20CA72A6AE63}.Development|Default.Build.0 = Development
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7CFBB799-9431-4F70-B8F4-403FB9CF8DFF}
+	EndGlobalSection
+EndGlobal

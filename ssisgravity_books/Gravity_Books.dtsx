@@ -11,8 +11,8 @@
   DTS:LocaleID="3082"
   DTS:ObjectName="Gravity_Books"
   DTS:PackageType="5"
-  DTS:VersionBuild="23"
-  DTS:VersionGUID="{04BF9628-BC9B-4835-AEF8-45F5B5C2844C}">
+  DTS:VersionBuild="31"
+  DTS:VersionGUID="{64ECCCE0-9BAD-40BB-B092-1825CE29881B}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -3598,14 +3598,6 @@ UNION
 	datepart(mm,status_date) as [month],
 	left(convert(varchar,status_date, 100),3) as month_name
 FROM [gravity_books].[dbo].order_history
-UNION
-  SELECT DISTINCT 
-	publication_date,
-	datepart(yyyy,publication_date) as [year],
-	datepart(qq,publication_date) as [quarter],
-	datepart(mm,publication_date) as [month],
-	left(convert(varchar,publication_date, 100),3) as month_name
-FROM [gravity_books].[dbo].book
 ORDER BY 1</property>
                 <property
                   dataType="System.String"
@@ -5527,22 +5519,39 @@ where [refTable].[book_id] = ?</property>
                   dataType="System.String"
                   description="Comando SQL para ejecutar."
                   name="SqlCommand"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">SELECT 
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">with orders as(SELECT 
 o.customer_id,
 a.address_id,
 ol.book_id,
 o.order_date,
 oh.status_date,
+--convert(date,o.order_date) as order_date,
+--convert(date,oh.status_date) as status_date,
 sm.method_name as shipping_method,
 sm.cost as shipping_cost,
-ol.price as order_price
+ol.price as order_price,
+row_number() over(partition by o.customer_id, a.address_id, ol.book_id,
+o.order_date,
+oh.status_date
+order by status_date desc) as fila
 FROM dbo.cust_order o
 inner join dbo.order_history oh on oh.order_id = o.order_id
 inner join dbo.address a on a.address_id = o.dest_address_id
 INNER JOIN dbo.shipping_method sm on sm.method_id = o.shipping_method_id
 INNER JOIN dbo.order_line ol on ol.order_id = o.order_id
 inner join dbo.book b on b.book_id = ol.book_id
-inner join dbo.book_author ba on b.book_id = ba.book_id</property>
+inner join dbo.book_author ba on b.book_id = ba.book_id
+)
+SELECT customer_id
+,address_id
+,book_id
+,order_date
+,status_date
+,shipping_method
+,shipping_cost
+,order_price
+ FROM orders where fila = 1
+ order by 1</property>
                 <property
                   dataType="System.String"
                   description="Variable que contiene el comando SQL para ejecutar."
@@ -5957,14 +5966,14 @@ inner join dbo.book_author ba on b.book_id = ba.book_id</property>
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,27.7333328511977"
+              EndConnector="0,27.733332851198"
               Start="0,0"
-              End="0,20.2333328511977">
+              End="0,20.233332851198">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,20.2333328511977" />
+                    End="0,20.233332851198" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -6951,7 +6960,7 @@ inner join dbo.book_author ba on b.book_id = ba.book_id</property>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="-99.8190234375,20.1523437499999,199.638046875,12.1953125"
+              BoundingBox="-99.8190234375,20.15234375,199.638046875,12.1953125"
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
@@ -6999,7 +7008,7 @@ inner join dbo.book_author ba on b.book_id = ba.book_id</property>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="-99.8190234375,20.1523437499999,199.638046875,12.1953125"
+              BoundingBox="-99.8190234375,20.15234375,199.638046875,12.1953125"
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
@@ -7069,9 +7078,9 @@ inner join dbo.book_author ba on b.book_id = ba.book_id</property>
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="-178,60.0000000000001"
+              EndConnector="-178,60"
               Start="0,0"
-              End="-178,52.5000000000001">
+              End="-178,52.5">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
@@ -7088,7 +7097,7 @@ inner join dbo.book_author ba on b.book_id = ba.book_id</property>
                     Point2="-178,20.4968944099379"
                     Point3="-178,24.4968944099379" />
                   <mssgle:LineSegment
-                    End="-178,52.5000000000001" />
+                    End="-178,52.5" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
